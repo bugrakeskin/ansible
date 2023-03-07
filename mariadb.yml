@@ -1,0 +1,16 @@
+---
+- name: Install and configure mariadb
+  hosts: all
+  become: yes
+
+  vars: 
+    mysql_port: 3306
+
+  tasks:
+  - name: install mariadb
+    ansible.builtin.apt:
+        pkg: 
+          - mariadb-server 
+          - mariadb-client
+        state: latest
+  
