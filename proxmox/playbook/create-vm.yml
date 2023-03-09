@@ -18,7 +18,6 @@
       api_host: 192.168.0.13
       storage: local-lvm
 
-
   - name: Start VM 
     community.general.proxmox_kvm:
       node: l3
