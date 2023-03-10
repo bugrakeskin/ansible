@@ -17,7 +17,19 @@
       api_token_secret: 6dd56423-3c6f-4ec1-99d2-a882945c865b
       api_host: 192.168.0.13
       storage: local-lvm
+      timeout: 500
 
+  - name: Resize the disk 
+    community.general.proxmox_disk:
+      vmid: 102
+      api_user: ansible@pam
+      api_token_id: ansible_pve_token
+      api_token_secret: 6dd56423-3c6f-4ec1-99d2-a882945c865b
+      api_host: 192.168.0.13
+      disk: scsi0
+      size: +5G
+      state: resized
+    
   - name: Start VM 
     community.general.proxmox_kvm:
       node: l3
@@ -25,5 +37,8 @@
       api_user: ansible@pam
       api_token_id: ansible_pve_token
       api_token_secret: 6dd56423-3c6f-4ec1-99d2-a882945c865b
+      api_password:
       api_host: 192.168.0.13
       state: started
+      timeout: 500
+      
