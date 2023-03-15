@@ -1,13 +1,13 @@
 ---
 # create-cloud-vm.yml
 - name: 'Deploy Cloud-init VMs'
-
   hosts: "{{ node_vm }}"
   vars_files:
     - vars/main.yml
+
   vars_prompt:
     - name: node_vm
-      prompt: Which node do you want to install? [h1][h2]..[l3]
+      prompt: Which node do you want to install?  [h1] [h2] [h3] [h4] [h5] [h6] [h7] [l1] [l2] [l3] [l4]
       private: false
       #default: "1.0"
     - name: name_your_vm
@@ -15,11 +15,11 @@
       private: false
       #default: "1.0"
     - name: ip_vm
-      prompt: What will be the IP address of the VM? [Just IP is enough]
+      prompt: What will be the IP address of the VM? Example 192.168.0.0/16 - Press Enter for default value. 
       private: false
-      default: "192.168.60.61"  
+      default: "192.168.60.61/16"
     - name: resize_vm
-      prompt: Enlarge the disk by? | 0 for skip
+      prompt: Enlarge the disk ? Enter for +G | - Press Enter to skip.
       private: false
       default: "0"
 
@@ -35,8 +35,6 @@
       api_token_secret: "{{ api_token_secret }}"
       api_host: "{{ node_vm }}"
       storage: "{{ storage }}"
-      #netif: 
-       # net1: {"name=eth0,gw=192.168.0.13,ip=192.168.60.182/16,bridge=vmbr1"}
       timeout: 500
 
   - name: Change IP
@@ -50,7 +48,7 @@
       net:
         net1: "virtio,bridge=vmbr1"
       ipconfig:
-        ipconfig1: "ip={{ ip_vm }}/16,gw=192.168.0.13"
+        ipconfig1: "ip={{ ip_vm }},gw={{ ansible_ssh_host }}" #"{{ ansible_ssh_host }}"
       update: true
 
   - name: Resize the disk 
