@@ -60,4 +60,15 @@
       api_host: "{{ node_vm }}"
       disk: scsi0
       size: "+{{ resize_vm }}G"
-      state: resized    
+      state: resized
+
+  - name: Start VM 
+    community.general.proxmox_kvm:
+      node: "{{ node }}"
+      name: "{{ name_your_vm }}"
+      api_user: "{{ api_user }}"
+      api_token_id: "{{ api_token_id }}"
+      api_token_secret: "{{ api_token_secret }}"
+      api_host: "{{ l3.api_host }}"
+      state: started
+      timeout: 500
