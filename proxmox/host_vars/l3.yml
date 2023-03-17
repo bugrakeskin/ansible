@@ -1,0 +1,4 @@
+api_host: 192.168.0.13
+clone: ubuntu-2204-temp
+gway: "192.168.0.13"
+vmid: 6061

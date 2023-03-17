@@ -3,7 +3,7 @@
 - name: 'Deploy Cloud-init VMs'
   hosts: "{{ node_vm }}"
   vars_files:
-    - vars/main.yml
+    - ../vars/main.yml
 
   vars_prompt:
     - name: node_vm
@@ -28,15 +28,18 @@
     community.general.proxmox_kvm:
       node: "{{ node_vm }}" 
       name: "{{ name_your_vm }}"     
-      vmid: 6061
-      clone: ubuntu-2204-temp
+      vmid: "{{ vmid }}"
+      clone: "{{ clone }}"
       api_user: "{{ api_user }}"
       api_token_id: "{{ api_token_id }}"
       api_token_secret: "{{ api_token_secret }}"
       api_host: "{{ node_vm }}"
       storage: "{{ storage }}"
       timeout: 500
-
+      
+  # - name: debug
+  #   ansible.builtin.debug: msg="{{ gway }}"
+    
   - name: Change IP
     community.general.proxmox_kvm:
       node: "{{ node_vm }}"      
@@ -48,7 +51,7 @@
       net:
         net1: "virtio,bridge=vmbr1"
       ipconfig:
-        ipconfig1: "ip={{ ip_vm }},gw={{ ansible_ssh_host }}" #"{{ ansible_ssh_host }}"
+        ipconfig1: "ip={{ ip_vm }},gw={{ gway }}"
       update: true
 
   - name: Resize the disk 
@@ -64,11 +67,11 @@
 
   - name: Start VM 
     community.general.proxmox_kvm:
-      node: "{{ node }}"
+      node: "{{ node_vm }}"
       name: "{{ name_your_vm }}"
       api_user: "{{ api_user }}"
       api_token_id: "{{ api_token_id }}"
       api_token_secret: "{{ api_token_secret }}"
-      api_host: "{{ l3.api_host }}"
+      api_host: "{{ node_vm }}"
       state: started
       timeout: 500
